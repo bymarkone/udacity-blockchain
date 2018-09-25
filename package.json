@@ -4,14 +4,16 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "api-test": "mocha api-test"
+    "api-test": "mocha api-test",
+    "integration-test": "mocha integration-test"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.18.2",
     "chai-http": "^4.2.0",
-    "express": "^4.16.3"
+    "express": "^4.16.3",
+    "level": "^4.0.0"
   },
   "devDependencies": {
     "chai": "^4.1.2",

@@ -5,8 +5,12 @@ const chai = require('chai'),
       repo = require('../src/repository')
 
 describe('Repository tests', () =>  { 
+    
+  afterEach(async () => {
+    await  repo.deleteAll() 
+  })
 
-  describe('Add and retrieve string data', () => {
+  describe('Add and retrieve data', () => {
       it('should add string data to repository', async () => {
         await repo.put(1, 'Manfred')
         await repo.put(2, 'Maria')
@@ -29,8 +33,20 @@ describe('Repository tests', () =>  {
 
         actual1.should.deep.equal(first)
         actual2.should.deep.equal(second)
-          
       })
+  })
+
+  describe('Counts data', () =>  {
+    it('Counts all data', async () => {
+        await repo.put(1, 'Manfred')
+        await repo.put(2, 'Maria')
+        await repo.put(3, 'John')
+        await repo.put(4, 'Larry')
+        await repo.put(5, 'Zigfried')
+
+        let count = await repo.count()
+        count.should.be.equal(5)
+    })
   })
 
   describe('Deletes data', () => {
@@ -38,13 +54,11 @@ describe('Repository tests', () =>  {
         await repo.put(1, 'Manfred')
         await repo.put(2, 'Maria')
 
-        let count = await repo.count()
-        count.should.be.equal(2)
-        
         await repo.deleteAll() 
         let newcount = await repo.count()
-        console.log(newcount)
+
         newcount.should.be.equal(0)
       })
   })
+
 })

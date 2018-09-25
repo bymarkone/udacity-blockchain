@@ -9,9 +9,6 @@ chai.use(chaiAsPromised)
 
 describe('Repository tests', () =>  { 
     
-  afterEach(async () => {
-    await repo.deleteAll() 
-  })
 
   describe('Add and retrieve data', () => {
       it('should add string data to repository', async () => {
@@ -41,6 +38,8 @@ describe('Repository tests', () =>  {
 
   describe('Counts data', () =>  {
     it('Counts all data', async () => {
+        await repo.deleteAll() 
+
         await repo.put(1, 'Manfred')
         await repo.put(2, 'Maria')
         await repo.put(3, 'John')
@@ -54,13 +53,15 @@ describe('Repository tests', () =>  {
 
   describe('Deletes data', () => {
       it('Deletes all data', async () => {
+        await repo.deleteAll() 
+
         await repo.put(1, 'Manfred')
         await repo.put(2, 'Maria')
 
         await repo.deleteAll() 
         let newcount = repo.count()
-
-        return  newcount.should.eventually.be.equal(0)
+      
+        return newcount.should.eventually.be.equal(0)
       })
   })
 

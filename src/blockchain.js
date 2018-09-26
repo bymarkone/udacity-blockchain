@@ -52,7 +52,6 @@ class Blockchain {
       const block = await this.getBlock(i)
       block.hash = ''
       const validBlockHash = SHA256(JSON.stringify(block)).toString()
-
       const nextBlock = await this.getBlock(i+1)
 
       if (validBlockHash !== nextBlock.previousBlockHash) errorLog.push(i)

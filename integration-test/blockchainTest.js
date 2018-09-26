@@ -60,4 +60,31 @@ describe('Blockchain integration tests', () => {
       current.previousBlockHash.should.equal(previous.hash)
     })
   })
+
+  describe('Validates blockchain', () => {
+    it('Validades integrity of block hash', async () => {
+      const blockchain = await new Blockchain()
+
+      await blockchain.addBlock(new Block("current block"))
+      const currentHeight = await blockchain.getBlockHeight()
+
+      const valid = await blockchain.validateBlock(currentHeight)
+      valid.should.be.true
+    })
+
+    it('Fails validationg when previous hash is changed', async () => {
+      const blockchain = await new Blockchain()
+
+      await blockchain.addBlock(new Block("current block"))
+      const currentHeight = await blockchain.getBlockHeight()
+      const lastBlock = await blockchain.getBlock(currentHeight)
+
+      lastBlock.previousBlockHash = 'an invalid hash' 
+      await repo.putJson(currentHeight, lastBlock)
+
+      const valid = await blockchain.validateBlock(currentHeight)
+      valid.should.be.false
+
+    })
+  })
 })

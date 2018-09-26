@@ -33,6 +33,19 @@ class Blockchain {
     return repo.getJson(blockHeight)
       .catch(err => undefined)
   }
+
+  async validateBlock(blockHeight) {
+    const block = await this.getBlock(blockHeight)
+    const blockHash = block.hash
+    block.hash = '' 
+    const validBlockHash = SHA256(JSON.stringify(block)).toString()
+    return blockHash === validBlockHash
+  }
+
+  async validateChain() {
+
+
+  }
     
 }
 

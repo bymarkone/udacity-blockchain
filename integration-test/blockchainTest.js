@@ -98,11 +98,43 @@ describe('Blockchain integration tests', () => {
       const currentHeight = await blockchain.getBlockHeight()
       const lastBlock = await blockchain.getBlock(currentHeight)
 
+      lastBlock.time = new Date()
       await repo.putJson(currentHeight, lastBlock)
 
       const valid = await blockchain.validateBlock(currentHeight)
       valid.should.be.false
 
+    })
+
+    it('Validates entire blockchain', async () => {
+      await repo.deleteAll()
+      const blockchain = await new Blockchain()
+
+      for (let i = 0; i < 10; i++) {
+        await blockchain.addBlock(new Block("test data" + i))
+      }
+
+      const errorLog = await blockchain.validateChain()
+      errorLog.should.be.empty
+    })
+
+    it('Return id of falsified blocks', async () => {
+      await repo.deleteAll()
+      const blockchain = await new Blockchain()
+
+      for (let i = 0; i < 10; i++) {
+        await blockchain.addBlock(new Block("test data" + i))
+      }
+
+      const toFalsify = [2, 4, 7]
+      for (let i = 0; i < toFalsify.length; i++) {
+        let blockToFalsify = await blockchain.getBlock(toFalsify[i])
+        blockToFalsify.data = 'Indiced error' 
+        await repo.putJson(toFalsify[i], blockToFalsify)
+      }
+      
+      const errorLog = await blockchain.validateChain()
+      errorLog.should.have.lengthOf(3)
     })
   })
 })

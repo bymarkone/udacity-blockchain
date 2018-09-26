@@ -43,8 +43,22 @@ class Blockchain {
   }
 
   async validateChain() {
+    let errorLog = []
 
+    const currentHeight = await this.getBlockHeight()
+    for (let i = 0; i < currentHeight - 1; i++) {
+      if (await !this.validateBlock(i)) errorLog.push(i)
+  
+      const block = await this.getBlock(i)
+      block.hash = ''
+      const validBlockHash = SHA256(JSON.stringify(block)).toString()
 
+      const nextBlock = await this.getBlock(i+1)
+
+      if (validBlockHash !== nextBlock.previousBlockHash) errorLog.push(i)
+    }
+
+    return errorLog
   }
     
 }

@@ -10,6 +10,10 @@ const chai = require('chai'),
 chai.use(chaiAsPromised)
 
 describe('Blockchain integration tests', () => {
+
+  before(async () => {
+    await repo.deleteAll()
+  })
   
   describe('Blockchain initialization', () => {
     it('Starts blockchain with Genesis block', async () => {
@@ -80,6 +84,20 @@ describe('Blockchain integration tests', () => {
       const lastBlock = await blockchain.getBlock(currentHeight)
 
       lastBlock.previousBlockHash = 'an invalid hash' 
+      await repo.putJson(currentHeight, lastBlock)
+
+      const valid = await blockchain.validateBlock(currentHeight)
+      valid.should.be.false
+
+    })
+    
+    it('Fails validationg when creating time is changed', async () => {
+      const blockchain = await new Blockchain()
+
+      await blockchain.addBlock(new Block("current block"))
+      const currentHeight = await blockchain.getBlockHeight()
+      const lastBlock = await blockchain.getBlock(currentHeight)
+
       await repo.putJson(currentHeight, lastBlock)
 
       const valid = await blockchain.validateBlock(currentHeight)

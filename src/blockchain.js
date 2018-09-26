@@ -18,7 +18,7 @@ class Blockchain {
     
     newBlock.height = currentHeight + 1
     newBlock.time = new Date().getTime().toString().slice(0, -3)
-    newBlock.previousBlockhash = previousBlock ? previousBlock.hash : ''
+    newBlock.previousBlockHash = previousBlock ? previousBlock.hash : ''
     newBlock.hash = SHA256(JSON.stringify(newBlock)).toString()
 
     await repo.putJson(newBlock.height, newBlock)

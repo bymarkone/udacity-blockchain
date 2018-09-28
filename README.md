@@ -12,7 +12,7 @@ Follow these instructions to get the project up and running on your local machin
 ```
 npm install
 ```
-## Running the tests
+### Running the tests
 
 ```
 npm run integration-test

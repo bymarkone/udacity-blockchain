@@ -1,6 +1,7 @@
 const express = require('express'),
       bodyParser = require('body-parser'),
       { Blockchain } = require('./blockchain'),
+      { Block } = require('./block'),
       app = express(),
       port = 8000
 
@@ -12,13 +13,19 @@ const blockchain = (() => {
   }
 })()
 
+app.use(bodyParser.json())
+
 app.get('/', (req, res) => res.send('Welcome!'))
 
 app.get('/blocks/:id', (req, res) => blockchain.get().getBlock(req.params.id).then(block => res.send(block)))
     
 app.post('/blocks', (req, res) => {
-      const block = req.body
-      blockchain.get().addBlock(block)
+      const payload = req.body.payload
+      if (!payload)
+        res.sendStatus(422)
+      else
+        blockchain.get().addBlock(new Block(payload))
+          .then(block => res.send(block))
     })
 
 app.use(bodyParser.urlencoded({ extended: false }))

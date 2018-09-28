@@ -21,10 +21,33 @@ describe('Blocks', () => {
         .get('/blocks/0')
         .end((err, res) => {
           res.should.have.status(200)
-          console.log(res.body)
+          res.body.body.should.equal('First block in the chain - Genesis block')
           done()
         })
      
+    })
+  })
+
+  describe('/POST block', () => {
+    it ('post payload to blockchain', (done) => {
+      chai.request(server)
+        .post('/blocks')
+        .send({ payload: 'This is a payload for a block'})
+        .end((err, res) => {
+          res.should.have.status(200)
+          res.body.body.should.equal('This is a payload for a block')
+          done()
+        })
+    })
+
+    it('returns 402 when payload is invalid', (done) => {
+      chai.request(server)
+        .post('/blocks')
+        .send('')
+        .end((err, res) => {
+          res.should.have.status(422)
+          done()
+        })
     })
   })
 })

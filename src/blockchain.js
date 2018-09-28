@@ -22,6 +22,7 @@ class Blockchain {
     newBlock.hash = SHA256(JSON.stringify(newBlock)).toString()
 
     await repo.putJson(newBlock.height, newBlock)
+    return newBlock
   }
 
   async getBlockHeight() {

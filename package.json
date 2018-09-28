@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "api-test": "mocha api-test",
-    "integration-test": "mocha integration-test"
+    "integration-test": "mocha integration-test",
+    "start": "node src/app.js"
   },
   "author": "",
   "license": "ISC",

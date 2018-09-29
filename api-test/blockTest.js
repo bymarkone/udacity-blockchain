@@ -1,11 +1,19 @@
+process.env.DATADIR = './testdata'
+
 const chai = require('chai'),
       chaiHttp = require('chai-http'),
       should = chai.should(),
-      server = require('../src/app')
+      server = require('../src/app'),
+      repo = require('../src/repository.js') 
 
 chai.use(chaiHttp)
 
 describe('Blocks', () => {
+
+  after(async () => {
+    await repo.deleteAll()
+  })
+
   describe('/GET block', () => {
     it('should have an endpoint to GET blocks', (done) => {
       chai.request(server)

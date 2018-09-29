@@ -5,11 +5,20 @@ const { Block } = require('./block')
 class Blockchain {
   constructor() {
     return (async () => {
-      let height = await this.getBlockHeight()
+      const height = await this.getBlockHeight()
       if (height < 0) 
-        await this.addBlock(new Block("First block in the chain - Genesis block"))
+        await this._addFirstBlock(new Block("First block in the chain - Genesis block"))
       return this
     })()
+  }
+
+  async _addFirstBlock(newBlock) {
+    const currentHeight = await this.getBlockHeight()
+    newBlock.height = currentHeight + 1
+    newBlock.time = new Date().getTime().toString().slice(0, -3)
+    newBlock.hash = SHA256(JSON.stringify(newBlock)).toString()
+    await repo.putJson(newBlock.height, newBlock)
+    return newBlock
   }
 
   async addBlock(newBlock) {

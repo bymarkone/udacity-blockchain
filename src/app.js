@@ -13,30 +13,24 @@ const blockchain = (() => {
   }
 })()
 
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({ extended: false }))
+
 const withSuccess = (res) => (result) => res.send(result)
 const withNotFound = (res) => (result) => res.sendStatus(404)
-const withUnprocessedEntity = (res) => (result, err) => res.sendStatus(422)
+const withUnprocessedEntity = (res) => () => res.sendStatus(422)
 
-app.use(bodyParser.json())
-
-app.get('/', (req, res) => res.send('Welcome!'))
+const validate = async (req) => { if (!req.body.payload) throw new Error() } 
 
 app.get('/block/:id', (req, res) => blockchain.get()
-  .getBlock(req.params.id)
-  .then(withSuccess(res))
-  .catch(withNotFound(res)))
-    
-app.post('/block', (req, res) => {
-      const payload = req.body.payload
-      if (!payload)
-        res.sendStatus(422)
-      else
-        blockchain.get().addBlock(new Block(payload))
-          .then(block => res.send(block))
-    })
+      .getBlock(req.params.id)
+      .then(withSuccess(res))
+      .catch(withNotFound(res)))
 
-app.use(bodyParser.urlencoded({ extended: false }))
-app.use(bodyParser.json())
+app.post('/block', (req, res) => validate(req)
+      .then(() => blockchain.get().addBlock(new Block(req.body.payload)))
+      .then(withSuccess(res))
+      .catch(withUnprocessedEntity(res)))
 
 app.listen(port, () => console.log(`Listening port ${port}!`))
 

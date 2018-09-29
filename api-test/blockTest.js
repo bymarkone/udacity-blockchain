@@ -9,7 +9,7 @@ describe('Blocks', () => {
   describe('/GET block', () => {
     it('should have an endpoint to GET blocks', (done) => {
       chai.request(server)
-        .get('/blocks/0')
+        .get('/block/0')
         .end((err, res) => {
           res.should.have.status(200)
           done()
@@ -18,20 +18,28 @@ describe('Blocks', () => {
 
     it('should get block by id', (done) => {
        chai.request(server)
-        .get('/blocks/0')
+        .get('/block/0')
         .end((err, res) => {
           res.should.have.status(200)
           res.body.body.should.equal('First block in the chain - Genesis block')
           done()
         })
-     
+    })
+
+    it('returns not found when block is not present', (done) => {
+      chai.request(server)
+        .get('/block/17')
+        .end((err, res) => {
+          res.should.have.status(404)   
+          done()
+        })
     })
   })
 
   describe('/POST block', () => {
     it ('post payload to blockchain', (done) => {
       chai.request(server)
-        .post('/blocks')
+        .post('/block')
         .send({ payload: 'This is a payload for a block'})
         .end((err, res) => {
           res.should.have.status(200)
@@ -42,7 +50,7 @@ describe('Blocks', () => {
 
     it('returns 402 when payload is invalid', (done) => {
       chai.request(server)
-        .post('/blocks')
+        .post('/block')
         .send('')
         .end((err, res) => {
           res.should.have.status(422)

@@ -13,13 +13,20 @@ const blockchain = (() => {
   }
 })()
 
+const withSuccess = (res) => (result) => res.send(result)
+const withNotFound = (res) => (result) => res.sendStatus(404)
+const withUnprocessedEntity = (res) => (result, err) => res.sendStatus(422)
+
 app.use(bodyParser.json())
 
 app.get('/', (req, res) => res.send('Welcome!'))
 
-app.get('/blocks/:id', (req, res) => blockchain.get().getBlock(req.params.id).then(block => res.send(block)))
+app.get('/block/:id', (req, res) => blockchain.get()
+  .getBlock(req.params.id)
+  .then(withSuccess(res))
+  .catch(withNotFound(res)))
     
-app.post('/blocks', (req, res) => {
+app.post('/block', (req, res) => {
       const payload = req.body.payload
       if (!payload)
         res.sendStatus(422)

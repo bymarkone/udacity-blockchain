@@ -32,7 +32,6 @@ class Blockchain {
 
   getBlock(blockHeight) {
     return repo.getJson(blockHeight)
-      .catch(err => undefined)
   }
 
   async validateBlock(blockHeight) {

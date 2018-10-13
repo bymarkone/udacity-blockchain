@@ -48,7 +48,7 @@ describe('Blocks', () => {
     it ('post payload to blockchain', (done) => {
       chai.request(server)
         .post('/block')
-        .send({ payload: 'This is a payload for a block'})
+        .send({ body: 'This is a payload for a block'})
         .end((err, res) => {
           res.should.have.status(200)
           res.body.body.should.equal('This is a payload for a block')

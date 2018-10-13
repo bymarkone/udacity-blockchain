@@ -20,7 +20,7 @@ const withSuccess = (res) => (result) => res.send(result)
 const withNotFound = (res) => (result) => res.sendStatus(404)
 const withUnprocessedEntity = (res) => () => res.sendStatus(422)
 
-const validate = async (req) => { if (!req.body.payload) throw new Error() } 
+const validate = async (req) => { if (!req.body.body) throw new Error() } 
 
 app.get('/block/:id', (req, res) => blockchain.get()
       .getBlock(req.params.id)
@@ -28,7 +28,7 @@ app.get('/block/:id', (req, res) => blockchain.get()
       .catch(withNotFound(res)))
 
 app.post('/block', (req, res) => validate(req)
-      .then(() => blockchain.get().addBlock(new Block(req.body.payload)))
+      .then(() => blockchain.get().addBlock(new Block(req.body.body)))
       .then(withSuccess(res))
       .catch(withUnprocessedEntity(res)))
 

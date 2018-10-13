@@ -30,12 +30,11 @@ This should start a webserver listening the port 8000.
 
 ### Block
 
-#### Get a block by id
-Returns the block with the specified id
+#### [GET] Get a block from the blockchain by id
 ```
 /block/:id
 ```
-#### Create a new block
+#### [POST] Post a message to the blockchain
 ```
 /block/
 ```

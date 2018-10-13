@@ -26,8 +26,26 @@ npm start
 ```
 This should start a webserver listening the port 8000.
 
-### API Docs
-API documentation is published by Postman [here](https://documenter.getpostman.com/view/5483694/RWgja2tR).
+## Endpoints
+
+### Block
+
+#### Get a block by id
+Returns the block with the specified id
+```
+/block/:id
+```
+#### Create a new block
+```
+/block/
+```
+###### Parameters
+```
+{
+    "body": <The message to be saved in the blockchain>
+}
+```
+
 
 
 

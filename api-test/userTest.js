@@ -2,7 +2,8 @@ const chai = require('chai'),
       chaiHttp = require('chai-http'),
       should = chai.should(),
 			pipe = require('pipe-functions'),
-      server = require('../src/app')
+      server = require('../src/app'),
+			fixtures = require('.fixtures')
 
 chai.use(chaiHttp)
 
@@ -38,20 +39,9 @@ describe('User', () => {
     it('validates message signature', (done) => {
       const requester = chai.request(server).keepOpen()
     	
-			const requireValidation = () => requester
-					.post('/requestValidation')
-					.send({ address: '142BDCeSGbXjWKaAnYXbMpZ6sbrSAo3DpZ'})
-
-			const validateSignature = () => requester
-					.post('/message-signature/validate')
-					.send({
-						address: '142BDCeSGbXjWKaAnYXbMpZ6sbrSAo3DpZ',
-						signature: 'H6ZrGrF0Y4rMGBMRT2+hHWGbThTIyhBS0dNKQRov9Yg6GgXcHxtO9GJN4nwD2yNXpnXHTWU9i+qdw5vpsooryLU='
-            })
-
-			pipe(
-				requireValidation,
-				validateSignature,
+		pipe(
+				fixtures.requireValidation(requester),
+				fixtures.validateSignature(requester),
 				(res) => {
 							for(let i=0; i < 2000000000; i++) i * 17
 

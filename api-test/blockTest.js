@@ -56,7 +56,7 @@ describe('Blocks', () => {
         })
     })
 
-    it('returns 402 when payload is invalid', (done) => {
+    it('returns 422 when payload is invalid', (done) => {
       chai.request(server)
         .post('/block')
         .send('')

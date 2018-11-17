@@ -1,3 +1,5 @@
+const bitcoinMessage = require('bitcoinjs-message')
+
 module.exports = (() => {
 	const timeStamp = () => (Date.now() / 1000 | 0),
 	      validationRequests = {}
@@ -15,19 +17,20 @@ module.exports = (() => {
 			return validationRequest
 		},
 		validate: (address, signature) => {
+
 			const now = timeStamp(),
 			      previousRequest = validationRequests[address],
   		      validationWindow = 300 - (now - previousRequest.requestTimeStamp)
+
+			const isValid = bitcoinMessage.verify(previousRequest.message, address, signature)
 
 			return {
 				address,
 				requestTimeStamp: previousRequest.requestTimeStamp,
 				message: previousRequest.message,
 				validationWindow: validationWindow,
-				messageSignature: 'valid'
+				messageSignature: isValid ? 'valid' : 'invalid' 
 			}
 		}
 	}
 })()
-
-

@@ -1,6 +1,9 @@
+const address = '1HZwkjkeaoZfTSaJxDw6aKkxp45agDiEzN',
+			bitcoin = require('bitcoinjs-lib'),
+			bitcoinMessage = require('bitcoinjs-message'),
+			keyPair = bitcoin.ECPair.fromWIF('5KYZdUEo39z3FPrtuX2QbbwGnNP5zTd7yyr2SC1j299sBCnWjss')
 
-const address = '__142BDCeSGbXjWKaAnYXbMpZ6sbrSAo3DpZ'
-const signature  = 'H6ZrGrF0Y4rMGBMRT2+hHWGbThTIyhBS0dNKQRov9Yg6GgXcHxtO9GJN4nwD2yNXpnXHTWU9i+qdw5vpsooryLU='
+const sign = (message) => bitcoinMessage.sign(message, keyPair.privateKey, keyPair.compressed)
 
 const star = {
 	"dec": "68° 52' 56.9",
@@ -8,19 +11,19 @@ const star = {
 	"story": "Found star using https://www.google.com/sky/"
 }
 
-const requireValidation = (requester) => () => requester
+const requireValidation = (requester) => (res) => requester
 		.post('/requestValidation')
 		.send({ address })
 
-const validateSignature = (requester) => () => requester
+const validateSignature = (requester) => (res) => requester
 		.post('/message-signature/validate')
-		.send({ address, signature })
+		.send({ address, signature: sign(res.body.message) })
 
 module.exports = {
+	sign,
 	star,
 	address,
-	signature,
 	requireValidation,
 	validateSignature
 }
-	
+

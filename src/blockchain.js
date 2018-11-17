@@ -8,6 +8,7 @@ class Blockchain {
       const height = await this.getBlockHeight()
       if (height < 0) 
         await this._addFirstBlock(new Block("First block in the chain - Genesis block"))
+			console.log("LOG: First block created")
       return this
     })()
   }
@@ -71,6 +72,12 @@ class Blockchain {
     
 }
 
-module.exports = {
-  Blockchain: Blockchain
-}
+const blockchain = (() => {
+  let instance = undefined
+  new Blockchain().then(result => { console.log("BLOCKCHAIN STARTED"); instance = result })
+  return {
+    get: () => { while(true) if (instance) return instance }
+  }
+})()
+
+module.exports = blockchain

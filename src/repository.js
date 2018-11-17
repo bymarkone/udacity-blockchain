@@ -15,7 +15,7 @@ const doDeleteAll = async () => {
         let batch = []
         await new Promise(resolve => {
           db.createKeyStream()
-            .on('data', key => batch.push({ type: 'del', key: key }))
+            .on('data', key => { if (key > 0) batch.push({ type: 'del', key: key }) })
             .on('close', resolve) })
         return db.batch(batch)  
       }

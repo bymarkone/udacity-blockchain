@@ -1,3 +1,5 @@
+process.env.DATADIR = './testdata'
+
 const chai = require('chai'),
       chaiHttp = require('chai-http'),
       should = chai.should(),
@@ -43,15 +45,13 @@ describe('User', () => {
 				fixtures.requireValidation(requester),
 				fixtures.validateSignature(requester),
 				(res) => {
-					for(let i=0; i < 2000000000; i++) i * 17
-
 					res.should.have.status(200)
 					res.body.registerStar.should.equal(true)
 					const status = res.body.status
 					status.address.should.equal(fixtures.address)
 					status.requestTimeStamp.should.not.be.an('undefined')
 					status.message.should.not.be.an('undefined')
-					status.messageSignature.should.equal('valid')
+					status.messageSignature.should.equal(true)
 
 					requester.close()
 					done()

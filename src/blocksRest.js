@@ -1,14 +1,6 @@
-const { Blockchain } = require('./blockchain'),
+const blockchain = require('./blockchain'),
       { Block } = require('./block'),
 			utils = require('./utils')
-
-const blockchain = (() => {
-  let instance = () => {}
-  new Blockchain().then(result => instance = result)
-  return {
-    get: () => instance
-  }
-})()
 
 const get = (req, res) => blockchain.get()
 		.getBlock(req.params.id)

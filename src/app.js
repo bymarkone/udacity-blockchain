@@ -2,6 +2,7 @@ const express = require('express'),
       bodyParser = require('body-parser'),
 			blocks = require('./blocksRest'),
 			users = require('./usersRest'),
+			stars = require('./starsRest'),
       app = express(),
       port = 8000
 
@@ -17,6 +18,7 @@ app.get('/block/:id', blocks.get)
 app.post('/block', blocks.post)
 app.post('/requestValidation', users.requestValidation)
 app.post('/message-signature/validate', users.validate)
+app.post('/stars', stars.post)
 
 app.listen(port, () => console.log(`Listening port ${port}!`))
 

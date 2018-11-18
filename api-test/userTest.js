@@ -22,18 +22,18 @@ describe('User', () => {
           const timestamp = res.body.requestTimeStamp
           res.body.message.should.equal(fixtures.address+':'+timestamp+':starRegistry')
           res.body.validationWindow.should.equal(300)
-          done()
+					done()
         })
     })
 
     it('returns 422 when address in not valid', (done) => {
       chai.request(server)
         .post('/requestValidation')
-        .send({ address: '' })
+        .send({ other: '' })
         .end((err, res) => {
           res.should.have.status(422) 
+					done()
         })
-        done()
     })
   })
   

@@ -32,9 +32,9 @@ describe('Stars' , () => {
 				(res) => {
 			 		res.should.have.status(200)		
 					requester.close()
-					done()
-				}
-			)
+				},
+				done
+			).catch(console.log)
 		})
 	})
 })

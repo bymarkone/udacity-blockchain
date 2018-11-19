@@ -74,13 +74,13 @@ This should start a webserver listening the port 8000.
 
 #### [POST] Post a star to be added in the blockchain for the address
 ```
-/start
+/star
 ```
 ###### Parameters
 ```
 {
     "address": <The address which is going to be validated>,
-		"star": <The data of the star registered by the user>
+    "star": <The data of the star registered by the user>
 }
 ```
 

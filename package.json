@@ -6,6 +6,7 @@
   "scripts": {
     "api-test": "mocha api-test",
     "integration-test": "mocha integration-test",
+    "test": "mocha test",
     "start": "node src/app.js"
   },
   "author": "",
@@ -18,7 +19,8 @@
     "crypto-js": "^3.1.9-1",
     "express": "^4.16.3",
     "level": "^4.0.0",
-    "pipe-functions": "^1.3.0"
+    "pipe-functions": "^1.3.0",
+    "utf8": "^3.0.0"
   },
   "devDependencies": {
     "chai": "^4.1.2",

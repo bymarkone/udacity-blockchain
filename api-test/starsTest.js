@@ -52,7 +52,6 @@ describe('Stars' , () => {
 				(res) => {
 			 		res.should.have.status(200)		
 					res.body.body.address.should.equal(fixtures.address)
-					res.body.body.star.decodedStory.should.equal(fixtures.star.story)
 					res.body.body.star.story.should.equal(Buffer(fixtures.star.story).toString('hex'))
 
 					requester.close()

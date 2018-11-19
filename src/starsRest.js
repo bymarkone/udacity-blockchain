@@ -8,9 +8,15 @@ const post = (req, res) => pipe(
 		() => utils.validate(req.body.address),
 		() => utils.validate(req.body.star),
 		() => utils.validate(validationService.isValid(req.body.address), '401'),
+		() => utils.validate(req.body.star.dec),
+		() => utils.validate(req.body.star.ra),
+		() => utils.validate(req.body.star.story),
+		() => utils.validateASCII(req.body.star.story),
+		() => utils.validateWordsCount(req.body.star.story, 250),
+		() => utils.validateBytes(req.body.star.story, 500),
 		() => { 
 			const body = req.body 
-			const starStory = { decodedStory: body.star.story, story: Buffer(body.star.story).toString('hex') }
+			const starStory = { story: Buffer(body.star.story).toString('hex') }
 			const star = { ...body.star, ...starStory }
 			return { ...body, star }
 		},

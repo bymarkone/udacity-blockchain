@@ -50,6 +50,7 @@ module.exports = (() => {
 						signatureIsValid = !!validationRequests[address].messageSignature
 
 			return thereIsARequest && requestIsNotExpired && signatureIsValid
-		}
+		},
+		remove: (address) => delete validationRequests[address] 
 	}
 })()

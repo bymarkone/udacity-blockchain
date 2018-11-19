@@ -15,7 +15,8 @@ const post = (req, res) => pipe(
 			return { ...body, star }
 		},
 		(object) => blockchain.get().addBlock(new Block(object)),
-		utils.withSuccess(res)
+		utils.withSuccess(res),
+		() => validationService.remove(req.body.address)
 	)
 	.catch((err) => {
 		if (err.message === '422') utils.withUnprocessedEntity(res)()

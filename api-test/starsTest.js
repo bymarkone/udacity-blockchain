@@ -60,5 +60,32 @@ describe('Stars' , () => {
 				done
 			).catch(console.log)
 		})
+
+		it('post ONLY one a star for a validation request', (done) => {
+			const requester = chai.request(server).keepOpen()
+		
+			pipe(
+				fixtures.requireValidation(requester),
+				fixtures.validateSignature(requester),
+				(res) => requester
+						.post('/stars')
+						.send({
+							address: fixtures.address,
+							star: fixtures.star
+						}),
+				(res) => requester
+						.post('/stars')
+						.send({
+							address: fixtures.address,
+							star: fixtures.star
+						}),
+				(res) => {
+			 		res.should.have.status(401)		
+					requester.close()
+				},
+				done
+			).catch(console.log)
+		})
+
 	})
 })

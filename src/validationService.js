@@ -23,17 +23,24 @@ module.exports = (() => {
   		      validationWindow = 300 - (now - previousRequest.requestTimeStamp)
 
 			const isValid = bitcoinMessage.verify(previousRequest.message, address, signature)
-
-			return {
+			const updatedRequest = {
 				address,
 				requestTimeStamp: previousRequest.requestTimeStamp,
 				message: previousRequest.message,
 				validationWindow: validationWindow,
 				messageSignature: isValid
 			}
+			validationRequests[address] = updatedRequest
+			return updatedRequest
 		},
-		isValid: (address) => validationRequests[address] && 
-			!isExpired(validationRequests[address]) &&
-			validationRequests[address].messageSignature
+		isValid: (address) => {
+			const thereIsARequest = !!validationRequests[address]
+			if (!thereIsARequest) return false
+
+			const requestIsNotExpired = !isExpired(validationRequests[address]),
+						signatureIsValid = !!validationRequests[address].messageSignature
+
+			return thereIsARequest && requestIsNotExpired && signatureIsValid
+		}
 	}
 })()

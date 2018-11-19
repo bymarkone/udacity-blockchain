@@ -17,6 +17,26 @@ describe('Stars' , () => {
   })
 
 	describe('/POST star', () => {		
+
+		it('is not authorized to post a start without validation', (done) => {
+			const requester = chai.request(server).keepOpen()
+
+			pipe(
+				(res) => requester
+						.post('/stars')
+						.send({
+							address: fixtures.address,
+							star: fixtures.star
+						}),
+				(res) => {
+			 		res.should.have.status(401)		
+					requester.close()
+				},
+				done
+			).catch(console.log)
+
+		})
+
 		it('post a star for a given user', (done) => {
 			const requester = chai.request(server).keepOpen()
 		

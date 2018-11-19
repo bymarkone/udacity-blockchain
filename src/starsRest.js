@@ -4,6 +4,12 @@ const blockchain = require('./blockchain'),
 			validationService = require('./validationService'),
       { Block } = require('./block')
 
+const withDecodedStar = (node) => {
+	node.body.star.decodedStory = Buffer(node.body.star.story, 'hex').toString('ascii')
+	return node
+}
+
+
 const post = (req, res) => pipe(
 		() => utils.validate(req.body.address),
 		() => utils.validate(req.body.star),
@@ -21,6 +27,7 @@ const post = (req, res) => pipe(
 			return { ...body, star }
 		},
 		(object) => blockchain.get().addBlock(new Block(object)),
+		(object) => withDecodedStar(object),
 		utils.withSuccess(res),
 		() => validationService.remove(req.body.address)
 	)

@@ -8,7 +8,13 @@ const post = (req, res) => pipe(
 		() => utils.validate(req.body.address),
 		() => utils.validate(req.body.star),
 		() => utils.validate(validationService.isValid(req.body.address), '401'),
-		() => blockchain.get().addBlock(new Block(req.body)),
+		() => { 
+			const body = req.body 
+			const starStory = { decodedStory: body.star.story, story: Buffer(body.star.story).toString('hex') }
+			const star = { ...body.star, ...starStory }
+			return { ...body, star }
+		},
+		(object) => blockchain.get().addBlock(new Block(object)),
 		utils.withSuccess(res)
 	)
 	.catch((err) => {

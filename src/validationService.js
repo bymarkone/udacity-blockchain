@@ -1,26 +1,35 @@
 const bitcoinMessage = require('bitcoinjs-message')
 
 module.exports = (() => {
-	const timeStamp = () => (Date.now() / 1000 | 0),
-				isExpired = (vr) => (timeStamp() - vr.requestTimeStamp) > 300,
+	const now = () => (Date.now() / 1000 | 0),
+				isExpired = (vr) => (now() - vr.requestTimeStamp) > 300,
+				updateWindow = (timeStamp) => 300 - (now() - timeStamp),
+				updateValidationRequest = (validationRequest) => {
+					if (!validationRequest) return
+					const validationWindow = { validationWindow: updateWindow(validationRequest.requestTimeStamp) }
+					if (validationWindow.validationWindow <= 0) return 
+					return { ...validationRequest, ...validationWindow }
+				},
 	      validationRequests = {}
 
 	return {
 		add: (address) => {
-			const now = timeStamp(),
-            validationRequest = {
-							address,
-							requestTimeStamp: now,
-							message: address.concat(':').concat(now).concat(':starRegistry'),
-							validationWindow: 300
-						}
+			const timeNow = now(),
+						validationRequest = updateValidationRequest(validationRequests[address]) ||
+							{
+								address,
+								requestTimeStamp: timeNow,
+								message: address.concat(':').concat(timeNow).concat(':starRegistry'),
+								validationWindow: 300
+							}
+
       validationRequests[address] = validationRequest
 			return validationRequest
 		},
 		validate: (address, signature) => {
-			const now = timeStamp(),
+			const timeNow = now(),
 			      previousRequest = validationRequests[address],
-  		      validationWindow = 300 - (now - previousRequest.requestTimeStamp)
+  		      validationWindow = 300 - (timeNow - previousRequest.requestTimeStamp)
 
 			const isValid = bitcoinMessage.verify(previousRequest.message, address, signature)
 			const updatedRequest = {

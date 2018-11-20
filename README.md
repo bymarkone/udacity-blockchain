@@ -88,7 +88,6 @@ This should start a webserver listening the port 8000.
 ```
 /star/address:[:address]
 ```
-```
 #### [GET] Get all the star stored in the blockchain with a given hash
 ```
 /star/hash:[:hash]

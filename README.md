@@ -32,7 +32,7 @@ This should start a webserver listening the port 8000.
 
 #### [GET] Get a block from the blockchain by id
 ```
-/block/:id
+/block/[:id]
 ```
 #### [POST] Post a message to the blockchain
 ```
@@ -72,6 +72,7 @@ This should start a webserver listening the port 8000.
 ```
 ###### Returns: the status of the request
 
+### Stars
 #### [POST] Post a star to be added in the blockchain for the address
 ```
 /star
@@ -83,6 +84,16 @@ This should start a webserver listening the port 8000.
     "star": <The data of the star registered by the user>
 }
 ```
+#### [GET] Get all the stars for a given address
+```
+/star/address:[:address]
+```
+```
+#### [GET] Get all the star stored in the blockchain with a given hash
+```
+/star/hash:[:hash]
+```
+
 
 
 

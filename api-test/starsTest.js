@@ -105,12 +105,38 @@ describe('Stars' , () => {
 						.send(),
 				(res) => {
 						res.status.should.be.equal(200)	
-						res.body.should.have.length(1)
+
 						requester.close()
 				},
 				done
 			).catch(console.log)
 		})
+
+
+		it('get star by hash', (done) => {
+			const requester = chai.request(server).keepOpen()
+
+			pipe(
+				fixtures.requireValidation(requester),
+				fixtures.validateSignature(requester),
+				(res) => requester
+						.post('/stars')
+						.send({
+							address: fixtures.address,
+							star: fixtures.star
+						}),
+				(res) => requester
+						.get('/stars/hash:' + res.body.hash)
+						.send(),
+				(res) => {
+						res.status.should.be.equal(200)	
+						res.body.body.address.should.equal(fixtures.address)
+						requester.close()
+				},
+				done
+			).catch(console.log)
+		})
+	
 	})
 
 })

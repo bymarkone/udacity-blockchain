@@ -37,9 +37,11 @@ const byAddress = async (req, res) => {
 	res.send(byAddress.map(utils.withDecodedStar))
 }
 
-const byHash = (req, res) => {
-	const hash = req.params.hash
+const byHash = async (req, res) => {
+	const hash = req.params.hash,
+				byHash = await blockchain.get().getByHash(hash)
 
+	res.send(utils.withDecodedStar(byHash))
 }
 
 module.exports = {

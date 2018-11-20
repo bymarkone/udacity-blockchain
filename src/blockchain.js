@@ -39,6 +39,15 @@ class Blockchain {
     return total - 1
   }
 
+	async getByHash(hash) {
+		const byHash = await repo.lookup(['hash'], hash)
+		if (byHash && byHash.length === 1) return byHash[0]
+	}
+
+	getByAddress(address) {
+		return repo.lookup(['body','address'], address)
+	}
+
   getBlock(blockHeight) {
     return repo.getJson(blockHeight)
   }

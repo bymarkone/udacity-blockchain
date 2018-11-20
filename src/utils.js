@@ -9,6 +9,12 @@ const validateASCII = (str) => /^[\x00-\x7F]*$/.test(str)
 const validateWordsCount = (str, count) => str.split(' ').length <= count
 const validateBytes = (str, size) => Buffer.byteLength(str, 'ascii') < size
 
+const withDecodedStar = (node) => {
+	if (!(node && node.body && node.body.star)) return node
+	node.body.star.decodedStory = Buffer(node.body.star.story, 'hex').toString('ascii')
+	return node
+}
+
 module.exports = {
 	withSuccess,
 	withNotFound,
@@ -17,5 +23,6 @@ module.exports = {
 	validate,
 	validateASCII,
 	validateWordsCount,
-	validateBytes
+	validateBytes,
+	withDecodedStar
 }

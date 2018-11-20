@@ -12,7 +12,7 @@ chai.use(chaiHttp)
 
 describe('Stars' , () => {
 
-  after(async () => {
+  afterEach(async () => {
     await repo.deleteAll()
   })
 
@@ -85,6 +85,32 @@ describe('Stars' , () => {
 				done
 			).catch(console.log)
 		})
-
 	})
+
+	describe('/GET star', () => {		
+		it('get star by address', (done) => {
+			const requester = chai.request(server).keepOpen()
+
+			pipe(
+				fixtures.requireValidation(requester),
+				fixtures.validateSignature(requester),
+				(res) => requester
+						.post('/stars')
+						.send({
+							address: fixtures.address,
+							star: fixtures.star
+						}),
+				(res) => requester
+						.get('/stars/address:' + fixtures.address)
+						.send(),
+				(res) => {
+						res.status.should.be.equal(200)	
+						res.body.should.have.length(1)
+						requester.close()
+				},
+				done
+			).catch(console.log)
+		})
+	})
+
 })

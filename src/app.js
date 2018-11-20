@@ -19,6 +19,8 @@ app.post('/block', blocks.post)
 app.post('/requestValidation', users.requestValidation)
 app.post('/message-signature/validate', users.validate)
 app.post('/stars', stars.post)
+app.get('/stars/address::address', stars.byAddress)
+app.get('/stars/hash::hash', stars.byHash)
 
 app.listen(port, () => console.log(`Listening port ${port}!`))
 

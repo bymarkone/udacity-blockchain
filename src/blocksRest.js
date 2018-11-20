@@ -4,6 +4,7 @@ const blockchain = require('./blockchain'),
 
 const get = (req, res) => blockchain.get()
 		.getBlock(req.params.id)
+		.then(utils.withDecodedStar)
 		.then(utils.withSuccess(res))
 		.catch(utils.withNotFound(res))
 
@@ -15,4 +16,4 @@ const post = (req, res) => utils.validate(req.body.body)
 module.exports = {
 	get, 
 	post
-}
+} 

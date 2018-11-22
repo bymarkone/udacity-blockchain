@@ -4,7 +4,7 @@ const blockchain = require('./blockchain'),
 			validationService = require('./validationService'),
       { Block } = require('./block')
 
-const post = (req, res) => pipe(
+const postStar = (req, res) => pipe(
 		() => utils.validate(req.body.address),
 		() => utils.validate(req.body.star),
 		() => utils.validate(validationService.isValid(req.body.address), '401'),
@@ -45,7 +45,7 @@ const byHash = async (req, res) => {
 }
 
 module.exports = {
-	post,
+	postStar,
 	byAddress,
 	byHash
 }

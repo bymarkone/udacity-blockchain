@@ -45,17 +45,6 @@ describe('Blocks', () => {
   })
 
   describe('/POST block', () => {
-    it ('post payload to blockchain', (done) => {
-      chai.request(server)
-        .post('/block')
-        .send({ body: 'This is a payload for a block'})
-        .end((err, res) => {
-          res.should.have.status(200)
-          res.body.body.should.equal('This is a payload for a block')
-          done()
-        })
-    })
-
     it('returns 422 when payload is invalid', (done) => {
       chai.request(server)
         .post('/block')

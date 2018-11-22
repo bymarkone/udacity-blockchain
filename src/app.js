@@ -15,10 +15,10 @@ app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 
 app.get('/block/:id', blocks.get)
-app.post('/block', blocks.post)
+app.post('/block', stars.postStar )
 app.post('/requestValidation', users.requestValidation)
 app.post('/message-signature/validate', users.validate)
-app.post('/stars', stars.post)
+app.post('/stars', stars.postStar)
 app.get('/stars/address::address', stars.byAddress)
 app.get('/stars/hash::hash', stars.byHash)
 

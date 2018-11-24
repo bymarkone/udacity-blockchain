@@ -5,9 +5,9 @@ const withUnauthorized = (res) => () => res.sendStatus(401)
 const validate = async (object, message='422') => { 
 	if (!object) throw new Error(message)
 }
-const validateASCII = (str) => /^[\x00-\x7F]*$/.test(str)
-const validateWordsCount = (str, count) => str.split(' ').length <= count
-const validateBytes = (str, size) => Buffer.byteLength(str, 'ascii') < size
+const validateASCII = async (str) => {if (!/^[\x00-\x7F]*$/.test(str)) throw new Error('ascii'); else true}
+const validateWordsCount = async (str, count) => {if (!(str.split(' ').length <= count)) throw new Error('words'); else true}
+const validateBytes = async (str, size) => {if (!(Buffer.byteLength(str, 'ascii') < size)) throw new Error('b'); else true}
 
 const withDecodedStar = (node) => {
 	if (!(node && node.body && node.body.star)) return node
